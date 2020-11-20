@@ -128,9 +128,12 @@ namespace TesteAPI.Controllers
 		[HttpGet("pesquisar/{nome}/{cnpj}")]
 		public IEnumerable<Empresa> PesquisarEmpresa([FromRoute] string nome, [FromRoute] string cnpj)
 		{
-			var retorno = _context.Empresa.Where(x => x.Nome.Contains(nome) || x.Cnpj.Equals(cnpj));
+			var retorno = _context.Empresa.Where(x => x.Nome.Contains(nome) || x.Cnpj.Replace("/","").Replace(".","").Replace("-","").Equals(cnpj));
 
-			return retorno;
+			if (retorno.Count() > 0)
+				return retorno;
+			else
+				return _context.Empresa;
 		}
 	}
 }
